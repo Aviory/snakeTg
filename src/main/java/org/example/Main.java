@@ -39,7 +39,7 @@ public class Main extends TelegramLongPollingBot{
 
         return "dathVaiderMybot"; // замініть на ім'я вашого бота
     }
-
+//s
     @Override
     public String getBotToken() {
         return ""; // замініть на токен вашого бота
