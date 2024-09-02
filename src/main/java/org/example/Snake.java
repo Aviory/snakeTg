@@ -46,13 +46,14 @@ public class Snake {
         return response;
     }
 
-    public static void changeSide(String text) {
+    public static void changeSide(String text) {//Livo
         switch (text){
             case "left":
                 currentWay = Way.LEFT;
                 break;
             case "top":
                 currentWay = Way.LEFT;
+
         }
     }
 

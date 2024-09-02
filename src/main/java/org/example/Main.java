@@ -42,7 +42,7 @@ public class Main extends TelegramLongPollingBot{
 //s
     @Override
     public String getBotToken() {
-        return ""; // замініть на токен вашого бота
+        return DataBase.getInstance().loadKey(); // замініть на токен вашого бота
     }
 
     Long chattID;
@@ -52,25 +52,56 @@ public class Main extends TelegramLongPollingBot{
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (!isAlive){
-            move = new Move();
-            move.start();
-            isAlive = true;
-        }
-
         if (update.hasMessage() && update.getMessage().hasText()) {
 
             Message message = update.getMessage();
             chattID = message.getChatId();
-//            mesId = message.getMessageId();
             String text = message.getText();
-            String data = "";
-            if (text.equals("bottom") || text.equals("left") ){
+            IDB dataBase = DataBase.getInstance();
+            if (text.equals("load")){
 
-                Snake.changeSide(text);
-
+                ArrayList<String> data = dataBase.loadData();
+                String mgss = "";
+                for (int i = 0; i < data.size(); i++) {
+                    mgss+=data.get(i)+"\n";
+                }
+                sendText(chattID,mgss);
+                return;
             }
 
+            dataBase.saveData(text);
+
+        }
+//        if (!isAlive){
+//            move = new Move();
+//            move.start();
+//            isAlive = true;
+//        }
+//
+//        if (update.hasMessage() && update.getMessage().hasText()) {
+//
+//            Message message = update.getMessage();
+//            chattID = message.getChatId();
+////            mesId = message.getMessageId();
+//            String text = message.getText();
+//            String data = "";
+//            if (text.equals("bottom") || text.equals("left") ){
+//
+//                Snake.changeSide("RIGHT");
+//
+//            }
+//
+//        }
+    }
+
+    public void sendText(Long who, String what){
+        SendMessage sm = SendMessage.builder()
+                .chatId(who.toString()) //Who are we sending a message to
+                .text(what).build();    //Message content
+        try {
+            execute(sm);                        //Actually sending the message
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);      //Any error will be printed here
         }
     }
 
